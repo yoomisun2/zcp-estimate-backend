@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: zcp-estimate-backend-service
+spec:
+  selector:
+    app: zcp-estimate-backend
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8088
+    targetPort: 8088
+  type: NodePort

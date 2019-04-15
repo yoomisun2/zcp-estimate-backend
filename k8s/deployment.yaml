@@ -1,0 +1,46 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: zcp-estimate-backend-deployment
+  labels:
+    app: zcp-estimate-backend
+spec:
+  selector:
+    matchLabels:
+      app: zcp-estimate-backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zcp-estimate-backend
+    spec:
+      containers:
+      - name: zcp-estimate-backend
+        image: poc-dev-registry.cloudzcp.io/test1/zcp-estimate-backend:1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8088
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: k8s
+        - name: MARIADB_HOST
+          valueFrom: 
+            configMapKeyRef:
+              name: zcp-estimate-backend-configmap
+              key: mariadb-host
+        - name: MARIADB_PORT
+          valueFrom: 
+            configMapKeyRef:
+              name: zcp-estimate-backend-configmap
+              key: mariadb-port
+        - name: MARIADB_USER
+          valueFrom: 
+            configMapKeyRef:
+              name: zcp-estimate-backend-configmap
+              key: mariadb-user
+        - name: MARIADB_PASSWORD
+          valueFrom: 
+            configMapKeyRef:
+              name: zcp-estimate-backend-configmap
+              key: mariadb-password
+        

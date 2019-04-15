@@ -1,0 +1,11 @@
+server:
+  port: 8088
+  
+mybatis:
+  type-aliases-package: io.cloudzcp.estimate
+  type-handlers-package: io.cloudzcp.estimate
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+    

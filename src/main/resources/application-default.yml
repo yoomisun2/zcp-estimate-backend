@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3306/zcp_estimate
+    username: root
+    password: wlfkfgksp
+    dbcp2:
+      validation-query: SELECT 1
