@@ -188,8 +188,15 @@ public class PlatformService {
 	
 	private ProductMspCostVersion getProductMspCostVersion(ProductMspCostVersion productMspCostVersion) {
 		List<ProductMspCost> productMspCostList = productsMapper.findAll();
+		if(productMspCostList == null) {
+			return productMspCostVersion;
+		}
 		
 		List<MspCost> mspCostList = mspCostsMapper.findByVersion(productMspCostVersion.getVersion());
+		if(mspCostList == null) {
+			return productMspCostVersion;
+		}
+		
 		Map<Integer, List<MspCost>> collectorMap = mspCostList.stream().collect(Collectors.groupingBy(MspCost::getProductId));
 		
 		productMspCostList.forEach(productMspCost -> {

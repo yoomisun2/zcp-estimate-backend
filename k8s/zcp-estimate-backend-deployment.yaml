@@ -16,23 +16,18 @@ spec:
     spec:
       containers:
       - name: zcp-estimate-backend
-        image: poc-dev-registry.cloudzcp.io/test1/zcp-estimate-backend:1.0
+        image: pog-dev-registry.cloudzcp.io/zcp-estimate/zcp-estimate-backend:0.0.1
         imagePullPolicy: Always
         ports:
         - containerPort: 8088
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: k8s
-        - name: MARIADB_HOST
+        - name: MARIADB_DATABASE
           valueFrom: 
             configMapKeyRef:
               name: zcp-estimate-backend-configmap
-              key: mariadb-host
-        - name: MARIADB_PORT
-          valueFrom: 
-            configMapKeyRef:
-              name: zcp-estimate-backend-configmap
-              key: mariadb-port
+              key: mariadb-database
         - name: MARIADB_USER
           valueFrom: 
             configMapKeyRef:

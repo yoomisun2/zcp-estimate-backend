@@ -1,0 +1,41 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: zcp-estimate-mariadb-deployment
+  labels:
+    app: zcp-estimate-mariadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zcp-estimate-mariadb
+  template:
+    metadata:
+      labels:
+        app: zcp-estimate-mariadb
+    spec:
+      containers:
+      - name: zcp-estimate-mariadb
+        image: mariadb
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        - name: MYSQL_DATABASE
+          value: zcp_estimate
+        - name: MYSQL_USER
+          value: zcp_estimate_user
+        - name: MYSQL_PASSWORD
+          value: zcp_estimate_password
+        args: 
+          - "--character-set-server=utf8mb4"
+          - "--collation-server=utf8mb4_unicode_ci"     
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"

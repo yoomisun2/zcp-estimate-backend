@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mariadb://${MARIADB_HOST}:${MARIADB_PORT}/zcp_estimate
+    url: jdbc:mariadb://${ZCP_ESTIMATE_MARIADB_SERVICE_HOST}:${ZCP_ESTIMATE_MARIADB_SERVICE_PORT}/${MARIADB_DATABASE}
     username: ${MARIADB_USER}
     password: ${MARIADB_PASSWORD}
     dbcp2:
