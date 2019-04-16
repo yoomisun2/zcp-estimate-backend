@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.cloudzcp.estimate.project.domain.Project;
+import io.cloudzcp.estimate.domain.project.Project;
 import io.cloudzcp.estimate.response.EstimateHistoryResponse;
 import io.cloudzcp.estimate.response.EstimateResponse;
 import io.cloudzcp.estimate.response.ProjectSummaryResponse;

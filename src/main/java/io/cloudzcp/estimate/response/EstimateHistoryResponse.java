@@ -1,6 +1,6 @@
 package io.cloudzcp.estimate.response;
 
-import io.cloudzcp.estimate.project.domain.Estimate;
+import io.cloudzcp.estimate.domain.project.Estimate;
 
 public class EstimateHistoryResponse extends Estimate {
 

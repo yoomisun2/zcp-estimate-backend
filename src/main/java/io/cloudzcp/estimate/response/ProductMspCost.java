@@ -3,8 +3,8 @@ package io.cloudzcp.estimate.response;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.cloudzcp.estimate.platform.domain.MspCost;
-import io.cloudzcp.estimate.platform.domain.Product;
+import io.cloudzcp.estimate.domain.platform.MspCost;
+import io.cloudzcp.estimate.domain.platform.Product;
 
 public class ProductMspCost extends Product {
 	

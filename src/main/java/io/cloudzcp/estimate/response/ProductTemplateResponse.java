@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.cloudzcp.estimate.constant.CommonConstants;
-import io.cloudzcp.estimate.platform.domain.Template;
+import io.cloudzcp.estimate.domain.platform.Template;
 
 public class ProductTemplateResponse implements Serializable {
 

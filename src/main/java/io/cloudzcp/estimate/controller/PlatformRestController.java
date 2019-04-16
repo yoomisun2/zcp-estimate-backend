@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.cloudzcp.estimate.response.ProductMspCost;
 import io.cloudzcp.estimate.response.ProductMspCostVersion;
 import io.cloudzcp.estimate.response.ProductTemplateResponse;
-import io.cloudzcp.estimate.platform.domain.MspCostVersion;
-import io.cloudzcp.estimate.platform.domain.Product;
+import io.cloudzcp.estimate.domain.platform.MspCostVersion;
+import io.cloudzcp.estimate.domain.platform.Product;
 import io.cloudzcp.estimate.response.AddonResponse;
 import io.cloudzcp.estimate.service.PlatformService;
 

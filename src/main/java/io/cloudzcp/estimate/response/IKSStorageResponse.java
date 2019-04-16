@@ -2,8 +2,8 @@ package io.cloudzcp.estimate.response;
 
 import java.util.List;
 
-import io.cloudzcp.estimate.iks.domain.IKSFileStorage;
-import io.cloudzcp.estimate.iks.domain.IKSStorageVersion;
+import io.cloudzcp.estimate.domain.iks.IKSFileStorage;
+import io.cloudzcp.estimate.domain.iks.IKSStorageVersion;
 
 public class IKSStorageResponse extends IKSStorageVersion {
 

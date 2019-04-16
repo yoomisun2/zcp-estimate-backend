@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.cloudzcp.estimate.domain.iks.IKSStorageVersion;
+import io.cloudzcp.estimate.domain.iks.IKSVmVersion;
 import io.cloudzcp.estimate.exception.NoDataFoundException;
-import io.cloudzcp.estimate.iks.domain.IKSStorageVersion;
-import io.cloudzcp.estimate.iks.domain.IKSVmVersion;
-import io.cloudzcp.estimate.iks.mapper.IKSFileStoragesMapper;
-import io.cloudzcp.estimate.iks.mapper.IKSStorageVersionsMapper;
-import io.cloudzcp.estimate.iks.mapper.IKSVmVersionsMapper;
-import io.cloudzcp.estimate.iks.mapper.IKSVmsMapper;
+import io.cloudzcp.estimate.mapper.iks.IKSFileStoragesMapper;
+import io.cloudzcp.estimate.mapper.iks.IKSStorageVersionsMapper;
+import io.cloudzcp.estimate.mapper.iks.IKSVmVersionsMapper;
+import io.cloudzcp.estimate.mapper.iks.IKSVmsMapper;
 import io.cloudzcp.estimate.response.IKSStorageResponse;
 import io.cloudzcp.estimate.response.IKSVmResponse;
 

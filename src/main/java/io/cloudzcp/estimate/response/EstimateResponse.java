@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import io.cloudzcp.estimate.project.domain.Estimate;
-import io.cloudzcp.estimate.project.domain.EstimateItem;
+import io.cloudzcp.estimate.domain.project.Estimate;
+import io.cloudzcp.estimate.domain.project.EstimateItem;
 
 public class EstimateResponse extends Estimate {
 

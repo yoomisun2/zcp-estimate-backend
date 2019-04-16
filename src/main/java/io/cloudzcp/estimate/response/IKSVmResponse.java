@@ -2,8 +2,8 @@ package io.cloudzcp.estimate.response;
 
 import java.util.List;
 
-import io.cloudzcp.estimate.iks.domain.IKSVm;
-import io.cloudzcp.estimate.iks.domain.IKSVmVersion;
+import io.cloudzcp.estimate.domain.iks.IKSVm;
+import io.cloudzcp.estimate.domain.iks.IKSVmVersion;
 
 public class IKSVmResponse extends IKSVmVersion {
 

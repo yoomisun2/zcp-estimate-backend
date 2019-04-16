@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.cloudzcp.estimate.iks.domain.IKSStorageVersion;
-import io.cloudzcp.estimate.iks.domain.IKSVmVersion;
+import io.cloudzcp.estimate.domain.iks.IKSStorageVersion;
+import io.cloudzcp.estimate.domain.iks.IKSVmVersion;
 import io.cloudzcp.estimate.response.IKSStorageResponse;
 import io.cloudzcp.estimate.response.IKSVmResponse;
 import io.cloudzcp.estimate.service.IKSCostsService;

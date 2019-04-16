@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.cloudzcp.estimate.domain.iks.General;
 import io.cloudzcp.estimate.exception.NoDataFoundException;
-import io.cloudzcp.estimate.iks.domain.General;
-import io.cloudzcp.estimate.iks.mapper.GeneralsMapper;
+import io.cloudzcp.estimate.mapper.iks.GeneralsMapper;
 
 @Service
 public class GeneralService {

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.cloudzcp.estimate.platform.domain.Addon;
+import io.cloudzcp.estimate.domain.platform.Addon;
 
 public class AddonResponse implements Serializable {
 

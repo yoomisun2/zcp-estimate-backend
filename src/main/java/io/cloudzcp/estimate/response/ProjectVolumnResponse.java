@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.cloudzcp.estimate.project.domain.Volumn;
+import io.cloudzcp.estimate.domain.project.Volumn;
 
 public class ProjectVolumnResponse implements Serializable {
 
