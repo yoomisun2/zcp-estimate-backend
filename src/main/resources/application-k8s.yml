@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/zcp-estimate
+    url: jdbc:mariadb://zcp-estimate-db-mariadb:3306/zcp-estimate
     username: zcp_estimate_user
     password: zcp_estimate_password
     dbcp2:
