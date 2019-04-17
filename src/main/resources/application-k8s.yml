@@ -1,16 +1,7 @@
 spring:
   datasource:
-    url: jdbc:mariadb://zcp-estimate-db-mariadb:3306/zcp_estimate
-    username: zcp_estimate_user
-    password: zcp_estimate_password
+    url: jdbc:mariadb://${ZCP_ESTIMATE_MARIADB_SERVICE_HOST}:${ZCP_ESTIMATE_MARIADB_SERVICE_PORT}/${MARIADB_DATABASE}
+    username: ${MARIADB_USER}
+    password: ${MARIADB_PASSWORD}
     dbcp2:
       validation-query: SELECT 1
-
-
-# spring:
-#   datasource:
-#     url: jdbc:mariadb://${ZCP_ESTIMATE_MARIADB_SERVICE_HOST}:${ZCP_ESTIMATE_MARIADB_SERVICE_PORT}/${MARIADB_DATABASE}
-#     username: ${MARIADB_USER}
-#     password: ${MARIADB_PASSWORD}
-#     dbcp2:
-#       validation-query: SELECT 1
