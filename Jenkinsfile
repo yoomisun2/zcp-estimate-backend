@@ -3,7 +3,7 @@ def label = "jenkins-${UUID.randomUUID().toString()}"
 
 def ZCP_USERID='cloudzcp-admin'
 def DOCKER_IMAGE='cloudzcp/zcp-estimate-backend'
-def K8S_NAMESPACE='default'
+def K8S_NAMESPACE='zcp-system'
 
 podTemplate(label:label,
     serviceAccount: "zcp-system-sa-${ZCP_USERID}",
