@@ -15,7 +15,7 @@ import io.cloudzcp.estimate.domain.platform.MspCost;
 import io.cloudzcp.estimate.domain.platform.MspCostVersion;
 import io.cloudzcp.estimate.domain.platform.Product;
 import io.cloudzcp.estimate.domain.platform.Template;
-import io.cloudzcp.estimate.exception.NoDataFoundException;
+import io.cloudzcp.estimate.exception.EntityNotFoundException;
 import io.cloudzcp.estimate.mapper.platform.AddonsMapper;
 import io.cloudzcp.estimate.mapper.platform.MspCostVersionsMapper;
 import io.cloudzcp.estimate.mapper.platform.MspCostsMapper;
@@ -51,7 +51,7 @@ public class PlatformService {
 	public Product getProduct(int productId) {
 		Product productService = productsMapper.findById(productId);
 		if(productService == null) {
-			throw new NoDataFoundException(String.format("%s not found.", productId));
+			throw new EntityNotFoundException(String.format("%s not found.", productId));
 		}
 		return productService;
 	}
@@ -70,7 +70,7 @@ public class PlatformService {
 		int count = productsMapper.delete(productId);
 		
 		if(count == 0) {
-			throw new NoDataFoundException(String.format("%s not found.", productId));
+			throw new EntityNotFoundException(String.format("%s not found.", productId));
 		}
 	}
 	
@@ -78,7 +78,7 @@ public class PlatformService {
 	public void modifyProduct(Product productService) {
 		int count = productsMapper.update(productService);
 		if(count == 0) {
-			throw new NoDataFoundException(String.format("%s not found.", productService.getId()));
+			throw new EntityNotFoundException(String.format("%s not found.", productService.getId()));
 		}
 	}
 	
@@ -183,19 +183,16 @@ public class PlatformService {
 	
 	public ProductMspCostVersion getLatestMspCost() {
 		ProductMspCostVersion mspCostVersion = mspCostVersionsMapper.findByLastVersion();
+		if(mspCostVersion == null) {
+			mspCostVersion = new ProductMspCostVersion();
+		}
+		
 		return getProductMspCostVersion(mspCostVersion);
 	}
 	
 	private ProductMspCostVersion getProductMspCostVersion(ProductMspCostVersion productMspCostVersion) {
 		List<ProductMspCost> productMspCostList = productsMapper.findAll();
-		if(productMspCostList == null) {
-			return productMspCostVersion;
-		}
-		
 		List<MspCost> mspCostList = mspCostsMapper.findByVersion(productMspCostVersion.getVersion());
-		if(mspCostList == null) {
-			return productMspCostVersion;
-		}
 		
 		Map<Integer, List<MspCost>> collectorMap = mspCostList.stream().collect(Collectors.groupingBy(MspCost::getProductId));
 		
@@ -234,7 +231,7 @@ public class PlatformService {
 	public ProductMspCostVersion getMspCostVersion(int id) {
 		ProductMspCostVersion mspCostVersion = mspCostVersionsMapper.findById(id);
 		if(mspCostVersion == null) {
-			throw new NoDataFoundException(String.format("%s not found.", id));
+			throw new EntityNotFoundException(String.format("%s not found.", id));
 		}
 		
 		return getProductMspCostVersion(mspCostVersion);

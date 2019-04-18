@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.cloudzcp.estimate.domain.iks.IKSStorageVersion;
 import io.cloudzcp.estimate.domain.iks.IKSVmVersion;
-import io.cloudzcp.estimate.exception.NoDataFoundException;
+import io.cloudzcp.estimate.exception.EntityNotFoundException;
 import io.cloudzcp.estimate.mapper.iks.IKSFileStoragesMapper;
 import io.cloudzcp.estimate.mapper.iks.IKSStorageVersionsMapper;
 import io.cloudzcp.estimate.mapper.iks.IKSVmVersionsMapper;
@@ -62,7 +62,7 @@ public class IKSCostsService {
 	public IKSVmResponse getVmVersion(int id) {
 		IKSVmResponse iksVmVersion = iksVmVersionsMapper.findById(id);
 		if(iksVmVersion == null) {
-			throw new NoDataFoundException(String.format("%s not found.", id));
+			throw new EntityNotFoundException(String.format("%s not found.", id));
 		} else {
 			iksVmVersion.setVms(iksVmsMapper.findByVersion(iksVmVersion.getVersion()));
 		}
@@ -100,7 +100,7 @@ public class IKSCostsService {
 	public IKSStorageResponse getStorage(String id) {
 		IKSStorageResponse iksStorageVersion = iksStorageVersionsMapper.findById(id);
 		if(iksStorageVersion == null) {
-			throw new NoDataFoundException(String.format("%s not found.", id));
+			throw new EntityNotFoundException(String.format("%s not found.", id));
 		} else {
 			iksStorageVersion.setFileStorages(iksFileStoragesMapper.findByVersion(iksStorageVersion.getVersion()));
 		}

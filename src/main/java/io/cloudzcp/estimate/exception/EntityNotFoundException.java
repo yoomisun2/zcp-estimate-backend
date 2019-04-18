@@ -1,10 +1,10 @@
 package io.cloudzcp.estimate.exception;
 
-public class NoDataFoundException extends RuntimeException {
+public class EntityNotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public NoDataFoundException(String message) {
+	public EntityNotFoundException(String message) {
 		super(message);
 	}
 }

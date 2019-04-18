@@ -14,9 +14,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 	
-	@ExceptionHandler(value = {NoDataFoundException.class})
-	protected ResponseEntity<Object> handleResourceNotFound(NoDataFoundException ex, WebRequest request) {
-		ErrorEntity entity = new ErrorEntity("Resource Not Found", ex.getMessage(), HttpStatus.NOT_FOUND.value());
+	@ExceptionHandler(value = {EntityNotFoundException.class})
+	protected ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex, WebRequest request) {
+		ErrorEntity entity = new ErrorEntity("Resource Not Found", ex.getLocalizedMessage(), HttpStatus.NOT_FOUND.value());
 		return handleExceptionInternal(ex, entity, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 

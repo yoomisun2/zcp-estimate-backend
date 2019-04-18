@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 import io.cloudzcp.estimate.constant.CommonConstants;
-import io.cloudzcp.estimate.exception.NoDataFoundException;
+import io.cloudzcp.estimate.exception.EntityNotFoundException;
 
 @Service
 public class CommonCodeService {
@@ -33,7 +33,7 @@ public class CommonCodeService {
 	public List<Object> getCommonCode(String groupName) {
 		List<Object> codes = codeMaps.get(groupName);
 		if(codes == null) {
-			throw new NoDataFoundException(String.format("%s not found", groupName));
+			throw new EntityNotFoundException(String.format("%s not found", groupName));
 		}
 		
 		return codes;

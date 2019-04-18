@@ -12,7 +12,7 @@ import io.cloudzcp.estimate.constant.CommonConstants;
 import io.cloudzcp.estimate.domain.project.EstimateItem;
 import io.cloudzcp.estimate.domain.project.Project;
 import io.cloudzcp.estimate.domain.project.Volumn;
-import io.cloudzcp.estimate.exception.NoDataFoundException;
+import io.cloudzcp.estimate.exception.EntityNotFoundException;
 import io.cloudzcp.estimate.mapper.project.EstimateItemsMapper;
 import io.cloudzcp.estimate.mapper.project.EstimatesMapper;
 import io.cloudzcp.estimate.mapper.project.ProjectsMapper;
@@ -51,7 +51,7 @@ public class ProjectService {
 	public Project getProject(int projectId) {
 		Project project = projectsMapper.findById(projectId);
 		if(project == null) {
-			throw new NoDataFoundException(String.format("%s not found", projectId));
+			throw new EntityNotFoundException(String.format("%s not found", projectId));
 		}
 		
 		return project;
@@ -60,7 +60,7 @@ public class ProjectService {
 	public Project modifyProject(Project project) {
 		int count = projectsMapper.update(project);
 		if(count == 0) {
-			throw new NoDataFoundException(String.format("%s not found", project.getId()));
+			throw new EntityNotFoundException(String.format("%s not found", project.getId()));
 		}
 		
 		return project;

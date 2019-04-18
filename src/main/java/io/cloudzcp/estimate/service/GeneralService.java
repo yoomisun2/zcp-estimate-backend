@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.cloudzcp.estimate.domain.iks.General;
-import io.cloudzcp.estimate.exception.NoDataFoundException;
+import io.cloudzcp.estimate.exception.EntityNotFoundException;
 import io.cloudzcp.estimate.mapper.iks.GeneralsMapper;
 
 @Service
@@ -27,7 +27,7 @@ public class GeneralService {
 	public General getGeneral(String id) {
 		General general = generalsMapper.findById(id);
 		if(general == null) {
-			throw new NoDataFoundException(String.format("%s not found.", id));
+			throw new EntityNotFoundException(String.format("%s not found.", id));
 		}
 		
 		return general;
