@@ -130,24 +130,26 @@ public class PlatformService {
 	public ProductTemplateResponse getTemplateList(int productId) {
 		ProductTemplateResponse response = new ProductTemplateResponse();
 		
-		List<Template> templates = templatesMapper.findByProductId(productId);
-		if(templates == null || templates.isEmpty())
+		List<Template> list = templatesMapper.findByProductId(productId);
+		if(list == null || list.isEmpty())
 			return response;
 		
-		templates.stream().filter(template -> CommonConstants.ESTIMATE_TYPE_CLOUDZ_SERVICE.equals(template.getEstimateType()))
+		list.stream().filter(template -> CommonConstants.ESTIMATE_TYPE_CLOUDZ_SERVICE.equals(template.getEstimateType()))
 						  .map(Template::getServiceName)
 						  .distinct()
 						  .forEach(serviceName -> {
 			response.addCloudZService(serviceName, 
-					templates.stream().filter(template -> CommonConstants.ESTIMATE_TYPE_CLOUDZ_SERVICE.equals(template.getEstimateType()) && serviceName.equals(template.getServiceName())).collect(Collectors.toList()));
+					list.stream().filter(template -> CommonConstants.ESTIMATE_TYPE_CLOUDZ_SERVICE.equals(template.getEstimateType()) && serviceName.equals(template.getServiceName()))
+									  .collect(Collectors.toList()));
 		});
 		
-		templates.stream().filter(template -> CommonConstants.ESTIMATE_TYPE_STORAGE_SERVICE.equals(template.getEstimateType()))
+		list.stream().filter(template -> CommonConstants.ESTIMATE_TYPE_STORAGE_SERVICE.equals(template.getEstimateType()))
 						  .map(Template::getServiceName)
 						  .distinct()
 						  .forEach(serviceName -> {
 			response.addStorageService(serviceName, 
-					templates.stream().filter(template -> CommonConstants.ESTIMATE_TYPE_STORAGE_SERVICE.equals(template.getEstimateType()) && serviceName.equals(template.getServiceName())).collect(Collectors.toList()));
+					list.stream().filter(template -> CommonConstants.ESTIMATE_TYPE_STORAGE_SERVICE.equals(template.getEstimateType()) && serviceName.equals(template.getServiceName()))
+									  .collect(Collectors.toList()));
 		});
 
 		return response;
@@ -170,12 +172,14 @@ public class PlatformService {
 			}
 		}
 		
+		int order = 1;
 		for(Template classification : classifications) {
+			classification.setProductId(productId);
+			classification.setSort(order++);
+			
 			if(classification.getId() == 0) {	//id가 없으면 insert
-				classification.setProductId(productId);
 				templatesMapper.insert(classification);
 			} else {						//id가 있으면 update
-				classification.setProductId(productId);
 				templatesMapper.update(classification);
 			}
 		}
@@ -192,7 +196,7 @@ public class PlatformService {
 	
 	private ProductMspCostVersion getProductMspCostVersion(ProductMspCostVersion productMspCostVersion) {
 		List<ProductMspCost> productMspCostList = productsMapper.findAll();
-		List<MspCost> mspCostList = mspCostsMapper.findByVersion(productMspCostVersion.getVersion());
+		List<MspCost> mspCostList = mspCostsMapper.findByVersionId(productMspCostVersion.getId());
 		
 		Map<Integer, List<MspCost>> collectorMap = mspCostList.stream().collect(Collectors.groupingBy(MspCost::getProductId));
 		
@@ -217,7 +221,7 @@ public class PlatformService {
 			for(ProductMspCost productMspCost : mspCostVersion.getProducts()) {
 				productMspCost.getMspCosts().forEach(mspCost -> {
 					mspCost.setProductId(productMspCost.getId());
-					mspCost.setMspCostVersionVersion(mspCostVersion.getVersion());
+					mspCost.setMspCostVersionId(mspCostVersion.getId());
 					mspCostsMapper.add(mspCost);
 				});
 			}

@@ -15,14 +15,14 @@ import io.cloudzcp.estimate.domain.platform.MspCost;
 public interface MspCostsMapper {
 
 	@Insert("insert into msp_costs "
-			+ "(product_id, alias, memory, cost, msp_cost_version_version)"
+			+ "(product_id, alias, memory, cost, msp_cost_version_id)"
 			+ "values "
-			+ "(#{productId}, #{alias}, #{memory}, #{cost}, #{mspCostVersionVersion})")
+			+ "(#{productId}, #{alias}, #{memory}, #{cost}, #{mspCostVersionId})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int add(MspCost mspCost);
 
-	@Select("select * from msp_costs where msp_cost_version_version = #{version} order by memory asc ")
-	public List<MspCost> findByVersion(@Param("version") int version);
+	@Select("select * from msp_costs where msp_cost_version_id = #{versionId} order by memory asc ")
+	public List<MspCost> findByVersionId(@Param("versionId") int versionId);
 	
 	@Delete("delete from msp_costs where product_id = #{productId} ")
 	public int deleteByProductId(@Param("productId") int productId);

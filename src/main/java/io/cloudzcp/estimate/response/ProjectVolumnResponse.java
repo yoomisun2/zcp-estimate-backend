@@ -9,22 +9,21 @@ import io.cloudzcp.estimate.domain.project.Volumn;
 public class ProjectVolumnResponse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private float memorySum;
-	private float cpuSum;
-	
+	private double sumMemory;
+	private double sumCpu;
 	private List<Cluster> clusters = new ArrayList<Cluster>();
 
-	public float getMemorySum() {
-		return memorySum;
+	public double getSumMemory() {
+		return sumMemory;
 	}
-	public void setMemorySum(float memorySum) {
-		this.memorySum = memorySum;
+	public void setSumMemory(double sumMemory) {
+		this.sumMemory = sumMemory;
 	}
-	public float getCpuSum() {
-		return cpuSum;
+	public double getSumCpu() {
+		return sumCpu;
 	}
-	public void setCpuSum(float cpuSum) {
-		this.cpuSum = cpuSum;
+	public void setSumCpu(double sumCpu) {
+		this.sumCpu = sumCpu;
 	}
 	public List<Cluster> getClusters() {
 		return clusters;
@@ -37,6 +36,9 @@ public class ProjectVolumnResponse implements Serializable {
 		Cluster cluster = new Cluster();
 		cluster.setName(name);
 		cluster.setApplications(applications);
+		cluster.setSumCpu(applications.stream().mapToDouble(Volumn::getPodCpuLimitSum).sum()/1000);
+		cluster.setSumMemory(Math.ceil(applications.stream().mapToDouble(Volumn::getPodMemoryLimitSum).sum()/1024));
+		
 		clusters.add(cluster);
 	}
 	
@@ -50,19 +52,32 @@ public class ProjectVolumnResponse implements Serializable {
 		});
 		return volumns;
 	}
-
 }
 
 class Cluster implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String name;
+	private double sumMemory;
+	private double sumCpu;
 	private List<Volumn> applications;
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public double getSumMemory() {
+		return sumMemory;
+	}
+	public void setSumMemory(double sumMemory) {
+		this.sumMemory = sumMemory;
+	}
+	public double getSumCpu() {
+		return sumCpu;
+	}
+	public void setSumCpu(double sumCpu) {
+		this.sumCpu = sumCpu;
 	}
 	public List<Volumn> getApplications() {
 		return applications;

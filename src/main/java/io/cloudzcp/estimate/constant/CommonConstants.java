@@ -32,6 +32,7 @@ public class CommonConstants {
 
 	public static String CLASSIFICATION_TYPE_VM = "VM";
 	public static String CLASSIFICATION_TYPE_FILE_STORAGE = "File_Storage";
+	public static String CLASSIFICATION_TYPE_BLOCK_STORAGE = "Block_Storage";
 	public static String CLASSIFICATION_TYPE_OBJECT_STORAGE = "Object_Storage";
 	public static String CLASSIFICATION_TYPE_IP_ALLOCATION = "IP_Allocation";
 	public static String CLASSIFICATION_TYPE_LABOR_COST = "Labor_Cost";

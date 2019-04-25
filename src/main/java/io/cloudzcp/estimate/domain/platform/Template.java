@@ -6,11 +6,12 @@ public class Template implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int id;
+	private int productId;
 	private String estimateType;
 	private String serviceName;
 	private String classificationName;
 	private String classificationType;
-	private int productId;
+	private int sort;
 	private String created;
 	private String createdDt;
 	public int getId() {
@@ -60,6 +61,12 @@ public class Template implements Serializable {
 	}
 	public void setCreatedDt(String createdDt) {
 		this.createdDt = createdDt;
+	}
+	public int getSort() {
+		return sort;
+	}
+	public void setSort(int sort) {
+		this.sort = sort;
 	}
 	
 }

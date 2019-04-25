@@ -78,6 +78,9 @@ public class ProjectService {
 		ProjectVolumnResponse volumn = new ProjectVolumnResponse();
 		List<Volumn> applications = volumnsMapper.findByProjectId(projectId);
 		
+		volumn.setSumCpu(applications.stream().mapToDouble(Volumn::getPodCpuLimitSum).sum()/1000);
+		volumn.setSumMemory(Math.ceil(applications.stream().mapToDouble(Volumn::getPodMemoryLimitSum).sum()/1024));
+		
 		Map<String, List<Volumn>> collectorMap = applications.stream().collect(Collectors.groupingBy(Volumn::getClusterName));
 		collectorMap.keySet().stream().sorted().forEach(key -> {
 			volumn.addCluster(key, collectorMap.get(key));
@@ -122,24 +125,13 @@ public class ProjectService {
 	}
 	
 	private void setEstimateItemList(EstimateResponse result) {
-		//set sub summary & structure
-		List<EstimateItem> summaryItems = estimateItemsMapper.getSubSummary(result.getId());
-		if(summaryItems == null || summaryItems.isEmpty()) return;
+		List<EstimateItem> list = estimateItemsMapper.findByEstimateId(result.getId());
+		Map<String, List<EstimateItem>> groupByMap = list.stream().collect(Collectors.groupingBy(EstimateItem::getEstimateType));
 		
-		EstimateItem totalSummaryItem = summaryItems.get(summaryItems.size() -1);
-		result.setSumMonthly(totalSummaryItem.getPricePerMonthly());
-		result.setSumYearly(totalSummaryItem.getPricePerYearly());
-		summaryItems.remove(totalSummaryItem);
-		
-		Map<String, List<EstimateItem>> groupByMap = summaryItems.stream().collect(Collectors.groupingBy(EstimateItem::getEstimateType));
-		result.addCloudZServiceStructure(groupByMap.get(CommonConstants.ESTIMATE_TYPE_CLOUDZ_SERVICE));
-		result.addStorageServiceStructure(groupByMap.get(CommonConstants.ESTIMATE_TYPE_STORAGE_SERVICE));
-		
-		//set classification
-		List<EstimateItem> items = estimateItemsMapper.findByEstimateId(result.getId());
-		Map<String, List<EstimateItem>> groupByMapItems = items.stream().collect(Collectors.groupingBy(EstimateItem::getEstimateType));
-		result.addPlatformServiceCostItem(groupByMapItems.get(CommonConstants.ESTIMATE_TYPE_CLOUDZ_SERVICE));
-		result.addStorageServiceItem(groupByMapItems.get(CommonConstants.ESTIMATE_TYPE_STORAGE_SERVICE));
+		result.setSumMonthly(list.stream().mapToInt(EstimateItem::getPricePerMonthly).sum());
+		result.setSumYearly(list.stream().mapToInt(EstimateItem::getPricePerYearly).sum());
+		result.addCloudZService(groupByMap.get(CommonConstants.ESTIMATE_TYPE_CLOUDZ_SERVICE));
+		result.addStorageService(groupByMap.get(CommonConstants.ESTIMATE_TYPE_STORAGE_SERVICE));
 		
 		// set summary
 		List<EstimateSummary> summary = estimateItemsMapper.getSummary(result.getId());
@@ -179,17 +171,19 @@ public class ProjectService {
 		estimate.setVersion(lastVersion == null ? 1 : lastVersion.getVersion() + 1);
 		estimatesMapper.add(estimate);
 		
-		estimate.findPlatformServiceCostItem().forEach(item -> {
+		int sort = 1;
+		for(EstimateItem item : estimate.findCloudZServiceItem()) {
 			item.setEstimateId(estimate.getId());
 			item.setEstimateType(CommonConstants.ESTIMATE_TYPE_CLOUDZ_SERVICE);
-			estimateItemsMapper.add(item);
-		});
+			item.setSort(sort++);
+		}
 		
-		estimate.findCloudZServiceItem().forEach(item -> {
+		for(EstimateItem item : estimate.findStorageServiceItem()) {
 			item.setEstimateId(estimate.getId());
 			item.setEstimateType(CommonConstants.ESTIMATE_TYPE_STORAGE_SERVICE);
+			item.setSort(sort++);
 			estimateItemsMapper.add(item);
-		});
+		}
 	}
 	
 }

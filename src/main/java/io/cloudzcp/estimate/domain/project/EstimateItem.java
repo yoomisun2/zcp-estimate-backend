@@ -27,8 +27,10 @@ public class EstimateItem implements Serializable {
 	private int memory;
 	private int pricePerMonthly;
 	private int pricePerYearly;
+	private int sort;
 	private String created;
 	private String createdDt;
+	
 	public int getId() {
 		return id;
 	}
@@ -172,6 +174,12 @@ public class EstimateItem implements Serializable {
 	}
 	public void setAddonApplicationName(String addonApplicationName) {
 		this.addonApplicationName = addonApplicationName;
+	}
+	public int getSort() {
+		return sort;
+	}
+	public void setSort(int sort) {
+		this.sort = sort;
 	}
 	
 }

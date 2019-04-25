@@ -46,10 +46,10 @@ CREATE TABLE iks_vms (
 	nw_speed					INT NOT NULL,
 	shared_price_per_hour		INT NOT NULL,
 	dedicated_price_per_hour	INT NOT NULL,
-	iks_vm_version_version				INT NOT NULL,
+	iks_vm_version_id			INT NOT NULL,
 	CONSTRAINT pk_iks_vms_id PRIMARY KEY (id)
 );
-CREATE INDEX ix_iks_vms_iks_vm_version_version on iks_vms (iks_vm_version_version);
+CREATE INDEX ix_iks_vms_iks_vm_version_id on iks_vms (iks_vm_version_id);
 
 CREATE TABLE iks_storage_versions (
 	id				INT NOT NULL AUTO_INCREMENT,			
@@ -69,10 +69,10 @@ CREATE TABLE iks_file_storages (
 	iops2_price_per_hour		FLOAT NOT NULL,
 	iops3_price_per_hour		FLOAT NOT NULL,
 	iops4_price_per_hour		FLOAT NOT NULL,
-	iks_storage_version_version		INT NOT NULL,
+	iks_storage_version_id		INT NOT NULL,
 	CONSTRAINT pk_iks_file_storages_id PRIMARY KEY (id)
 );
-CREATE INDEX ix_iks_file_storages_iks_storage_version_version on iks_file_storages (iks_storage_version_version);
+CREATE INDEX ix_iks_file_storages_iks_storage_version_id on iks_file_storages (iks_storage_version_id);
 
 CREATE TABLE products (
 	id						INT NOT NULL AUTO_INCREMENT,
@@ -102,12 +102,13 @@ CREATE INDEX ix_addons_product_id on addons (product_id);
 
 CREATE TABLE templates (
 	id						INT NOT NULL AUTO_INCREMENT,
+	product_id				INT NOT NULL,
 	estimate_type			VARCHAR(20) NOT NULL,
 	service_name			VARCHAR(100) NOT NULL,
 	classification_name 	VARCHAR(100) NOT NULL,
 	classification_type		VARCHAR(20) NOT NULL,
-	product_id				INT NOT NULL,
-	created 				VARCHAR(20) NULL,
+	sort					INT NOT NULL,
+	created 				VARCHAR(20),
 	created_dt  			TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT pk_templates_id PRIMARY KEY (id)
 );
@@ -129,11 +130,11 @@ CREATE TABLE msp_costs (
 	alias						VARCHAR(20),
 	memory						INT NOT NULL,
 	cost						INT NOT NULL,
-	msp_cost_version_version	INT NOT NULL,
+	msp_cost_version_id	INT NOT NULL,
 	CONSTRAINT pk_msp_costs_id PRIMARY KEY (id)
 );
 CREATE INDEX ix_msp_costs_product_id on msp_costs (product_id);
-CREATE INDEX ix_msp_costs_msp_cost_version_version on msp_costs (msp_cost_version_version);
+CREATE INDEX ix_msp_costs_msp_cost_version_id on msp_costs (msp_cost_version_id);
 
 CREATE TABLE projects (
 	id				INT NOT NULL AUTO_INCREMENT,
@@ -151,11 +152,11 @@ CREATE TABLE volumns (
 	app_memory_min			INT,
 	app_memory_max			INT,
 	replica_count			INT,
-	pod_momory_request		INT,
+	pod_memory_request		INT,
 	pod_memory_limit		INT,
 	pod_cpu_request			INT,
 	pod_cpu_limit			INT,
-	pod_momory_request_sum	FLOAT,
+	pod_memory_request_sum	FLOAT,
 	pod_memory_limit_sum	FLOAT,
 	pod_cpu_request_sum		FLOAT,
 	pod_cpu_limit_sum		FLOAT,
@@ -184,7 +185,7 @@ CREATE INDEX ix_estimates_project_id on estimates (project_id);
 
 CREATE TABLE estimate_items (
 	id						INT NOT NULL AUTO_INCREMENT,
-	estimate_id			INT NOT NULL,
+	estimate_id				INT NOT NULL,
 	estimate_type			VARCHAR(20) NOT NULL,
 	cluster_name			VARCHAR(20) NOT NULL,
 	product_id				INT NOT NULL,
@@ -203,6 +204,7 @@ CREATE TABLE estimate_items (
 	memory					INT,
 	price_per_monthly		INT,
 	price_per_yearly		INT,
+	sort					INT NOT NULL,
 	created					VARCHAR(20),
 	created_dt				TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT pk_estimate_items_id PRIMARY KEY (id)

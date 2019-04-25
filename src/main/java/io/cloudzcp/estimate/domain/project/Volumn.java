@@ -15,10 +15,10 @@ public class Volumn implements Serializable {
 	private int podMemoryLimit;
 	private int podCpuRequest;
 	private int podCpuLimit;
-	private float podMemoryRequestSum;
-	private float podMemoryLimitSum;
-	private float podCpuRequestSum;
-	private float podCpuLimitSum;
+	private double podMemoryRequestSum;
+	private double podMemoryLimitSum;
+	private double podCpuRequestSum;
+	private double podCpuLimitSum;
 	private int projectId;
 	private String created;
 	private String createdDt;
@@ -82,28 +82,28 @@ public class Volumn implements Serializable {
 	public void setPodCpuLimit(int podCpuLimit) {
 		this.podCpuLimit = podCpuLimit;
 	}
-	public float getPodMemoryRequestSum() {
+	public double getPodMemoryRequestSum() {
 		return podMemoryRequestSum;
 	}
-	public void setPodMemoryRequestSum(float podMemoryRequestSum) {
+	public void setPodMemoryRequestSum(double podMemoryRequestSum) {
 		this.podMemoryRequestSum = podMemoryRequestSum;
 	}
-	public float getPodMemoryLimitSum() {
+	public double getPodMemoryLimitSum() {
 		return podMemoryLimitSum;
 	}
-	public void setPodMemoryLimitSum(float podMemoryLimitSum) {
+	public void setPodMemoryLimitSum(double podMemoryLimitSum) {
 		this.podMemoryLimitSum = podMemoryLimitSum;
 	}
-	public float getPodCpuRequestSum() {
+	public double getPodCpuRequestSum() {
 		return podCpuRequestSum;
 	}
-	public void setPodCpuRequestSum(float podCpuRequestSum) {
+	public void setPodCpuRequestSum(double podCpuRequestSum) {
 		this.podCpuRequestSum = podCpuRequestSum;
 	}
-	public float getPodCpuLimitSum() {
+	public double getPodCpuLimitSum() {
 		return podCpuLimitSum;
 	}
-	public void setPodCpuLimitSum(float podCpuLimitSum) {
+	public void setPodCpuLimitSum(double podCpuLimitSum) {
 		this.podCpuLimitSum = podCpuLimitSum;
 	}
 	public int getProjectId() {

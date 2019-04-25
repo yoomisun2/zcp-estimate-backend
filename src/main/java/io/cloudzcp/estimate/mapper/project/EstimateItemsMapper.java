@@ -26,14 +26,14 @@ public interface EstimateItemsMapper {
 			+ " 	   items.classification_name, items.classification_type, items.addon_id,  "
 			+ "		   ifnull(a.application_name, ifnull(items.addon_application_name, '')) as addon_application_name,  "
 			+ " 	   items.iks_vm_id, items.hardware_type, items.storage_type, items.endurance_iops, items.storage_size,   "
-			+ " 	   items.number, items.cores, items.memory, items.price_per_monthly, items.price_per_yearly, items.created, items.created_dt,  "
+			+ " 	   items.number, items.cores, items.memory, items.price_per_monthly, items.price_per_yearly, items.sort, items.created, items.created_dt,  "
 			+ " 	   p.name as product_name , v.name as iks_vm_name  "
 			+ " from estimate_items as items "
 			+ " 	 left outer join products p on p.id = items.product_id "
 			+ " 	 left outer join iks_vms v on v.id = items.iks_vm_id "
 			+ " 	 left outer join addons a on a.id = items.addon_id  "
 			+ " where items.estimate_id = #{estimateId} "
-			+ " order by items.id asc")
+			+ " order by items.sort asc")
 	public List<EstimateItem> findByEstimateId(@Param("estimateId") int estimateId);
 	
 	@Select("   select cluster_name, product_id, product_name, estimate_type,"
@@ -53,9 +53,9 @@ public interface EstimateItemsMapper {
 	public List<EstimateSummary> getSummary(@Param("estimateId") int estimateId);
 
 	@Insert("insert into estimate_items "
-			+ "(estimate_id, estimate_type, cluster_name, product_id, service_name, classification_name, classification_type, addon_id, addon_application_name, iks_vm_id, hardware_type, storage_type, endurance_iops, storage_size, number, cores, memory, price_per_monthly, price_per_yearly, created)"
+			+ "(estimate_id, estimate_type, cluster_name, product_id, service_name, classification_name, classification_type, addon_id, addon_application_name, iks_vm_id, hardware_type, storage_type, endurance_iops, storage_size, number, cores, memory, price_per_monthly, price_per_yearly, sort, created)"
 			+ "values "
-			+ "(#{estimateId}, #{estimateType}, #{clusterName}, #{productId}, #{serviceName}, #{classificationName}, #{classificationType}, #{addonId}, #{addonApplicationName}, #{iksVmId}, #{hardwareType}, #{storageType}, #{enduranceIops}, #{storageSize}, #{number}, #{cores}, #{memory}, #{pricePerMonthly}, #{pricePerYearly}, #{created})")
+			+ "(#{estimateId}, #{estimateType}, #{clusterName}, #{productId}, #{serviceName}, #{classificationName}, #{classificationType}, #{addonId}, #{addonApplicationName}, #{iksVmId}, #{hardwareType}, #{storageType}, #{enduranceIops}, #{storageSize}, #{number}, #{cores}, #{memory}, #{pricePerMonthly}, #{pricePerYearly}, #{sort}, #{created})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int add(EstimateItem item);
 

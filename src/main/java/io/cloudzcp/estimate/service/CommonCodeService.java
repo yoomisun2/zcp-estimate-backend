@@ -27,7 +27,7 @@ public class CommonCodeService {
 		codeMaps.put("endurance_iops", Arrays.asList(CommonConstants.ENDURANCE_IOPS_1, CommonConstants.ENDURANCE_IOPS_2, CommonConstants.ENDURANCE_IOPS_3, CommonConstants.ENDURANCE_IOPS_4));
 		codeMaps.put("discount_rate", Arrays.asList(CommonConstants.DISCOUNT_RATE_10, CommonConstants.DISCOUNT_RATE_20, CommonConstants.DISCOUNT_RATE_25, CommonConstants.DISCOUNT_RATE_30, CommonConstants.DISCOUNT_RATE_40));
 		codeMaps.put("backup_yn", Arrays.asList(CommonConstants.BACKUP_YN_Y, CommonConstants.BACKUP_YN_N));
-		codeMaps.put("classification_type", Arrays.asList(CommonConstants.CLASSIFICATION_TYPE_VM, CommonConstants.CLASSIFICATION_TYPE_FILE_STORAGE, CommonConstants.CLASSIFICATION_TYPE_OBJECT_STORAGE, CommonConstants.CLASSIFICATION_TYPE_IP_ALLOCATION, CommonConstants.CLASSIFICATION_TYPE_LABOR_COST));
+		codeMaps.put("classification_type", Arrays.asList(CommonConstants.CLASSIFICATION_TYPE_VM, CommonConstants.CLASSIFICATION_TYPE_FILE_STORAGE, CommonConstants.CLASSIFICATION_TYPE_BLOCK_STORAGE, CommonConstants.CLASSIFICATION_TYPE_OBJECT_STORAGE, CommonConstants.CLASSIFICATION_TYPE_IP_ALLOCATION, CommonConstants.CLASSIFICATION_TYPE_LABOR_COST));
 	}
 	
 	public List<Object> getCommonCode(String groupName) {

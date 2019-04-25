@@ -2,8 +2,6 @@ package io.cloudzcp.estimate.domain.iks;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class IKSFileStorage implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -14,7 +12,7 @@ public class IKSFileStorage implements Serializable {
 	private float iops2PricePerHour;
 	private float iops3PricePerHour;
 	private float iops4PricePerHour;
-	private int iksStorageVersionVersion;
+	private int iksStorageVersionId;
 	
 	public int getId() {
 		return id;
@@ -34,11 +32,11 @@ public class IKSFileStorage implements Serializable {
 	public void setIops1PricePerHour(float iops1PricePerHour) {
 		this.iops1PricePerHour = iops1PricePerHour;
 	}
-	public int getIksStorageVersionVersion() {
-		return iksStorageVersionVersion;
+	public int getIksStorageVersionId() {
+		return iksStorageVersionId;
 	}
-	public void setIksStorageVersionVersion(int iksStorageVersionVersion) {
-		this.iksStorageVersionVersion = iksStorageVersionVersion;
+	public void setIksStorageVersionId(int iksStorageVersionId) {
+		this.iksStorageVersionId = iksStorageVersionId;
 	}
 	public float getIops2PricePerHour() {
 		return iops2PricePerHour;

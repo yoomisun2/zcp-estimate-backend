@@ -15,7 +15,7 @@ public class IKSVm implements Serializable {
 	private int nwSpeed;
 	private int sharedPricePerHour;
 	private int dedicatedPricePerHour;
-	private int iksVmVersionVersion;
+	private int iksVmVersionId;
 
 	public int getId() {
 		return id;
@@ -73,12 +73,12 @@ public class IKSVm implements Serializable {
 		this.dedicatedPricePerHour = dedicatedPricePerHour;
 	}
 
-	public int getIksVmVersionVersion() {
-		return iksVmVersionVersion;
+	public int getIksVmVersionId() {
+		return iksVmVersionId;
 	}
 
-	public void setIksVmVersionVersion(int iksVmVersionVersion) {
-		this.iksVmVersionVersion = iksVmVersionVersion;
+	public void setIksVmVersionId(int iksVmVersionId) {
+		this.iksVmVersionId = iksVmVersionId;
 	}
 	
 }

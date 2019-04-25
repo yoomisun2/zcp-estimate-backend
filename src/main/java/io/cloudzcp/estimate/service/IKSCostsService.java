@@ -35,7 +35,7 @@ public class IKSCostsService {
 	public IKSVmResponse getLatestVm() {
 		IKSVmResponse iksVm = iksVmVersionsMapper.findByLastVersion();
 		if(iksVm != null) {
-			iksVm.setVms(iksVmsMapper.findByVersion(iksVm.getVersion()));
+			iksVm.setVms(iksVmsMapper.findByVersionId(iksVm.getId()));
 		}
 		
 		return iksVm;
@@ -49,7 +49,7 @@ public class IKSCostsService {
 		
 		if(iksVmVersion.getVms() != null) {
 			iksVmVersion.getVms().forEach(iksVm -> {
-				iksVm.setIksVmVersionVersion(iksVmVersion.getVersion());
+				iksVm.setIksVmVersionId(iksVmVersion.getId());
 				iksVmsMapper.add(iksVm);
 			});
 		}
@@ -64,7 +64,7 @@ public class IKSCostsService {
 		if(iksVmVersion == null) {
 			throw new EntityNotFoundException(String.format("%s not found.", id));
 		} else {
-			iksVmVersion.setVms(iksVmsMapper.findByVersion(iksVmVersion.getVersion()));
+			iksVmVersion.setVms(iksVmsMapper.findByVersionId(iksVmVersion.getId()));
 		}
 		
 		return iksVmVersion;
@@ -73,7 +73,7 @@ public class IKSCostsService {
 	public IKSStorageResponse getLatestStorage() {
 		IKSStorageResponse iksStorage = iksStorageVersionsMapper.findByLastVersion();
 		if(iksStorage != null) {
-			iksStorage.setFileStorages(iksFileStoragesMapper.findByVersion(iksStorage.getVersion()));
+			iksStorage.setFileStorages(iksFileStoragesMapper.findByVersionId(iksStorage.getId()));
 		}
 		
 		return iksStorage;
@@ -87,7 +87,7 @@ public class IKSCostsService {
 		
 		if(iksStorageVersion.getFileStorages() != null) {
 			iksStorageVersion.getFileStorages().forEach(iksFileStorage -> {
-				iksFileStorage.setIksStorageVersionVersion(iksStorageVersion.getVersion());
+				iksFileStorage.setIksStorageVersionId(iksStorageVersion.getId());
 				iksFileStoragesMapper.add(iksFileStorage);
 			});
 		}
@@ -102,7 +102,7 @@ public class IKSCostsService {
 		if(iksStorageVersion == null) {
 			throw new EntityNotFoundException(String.format("%s not found.", id));
 		} else {
-			iksStorageVersion.setFileStorages(iksFileStoragesMapper.findByVersion(iksStorageVersion.getVersion()));
+			iksStorageVersion.setFileStorages(iksFileStoragesMapper.findByVersionId(iksStorageVersion.getId()));
 		}
 		
 		return iksStorageVersion;

@@ -2,8 +2,6 @@ package io.cloudzcp.estimate.domain.platform;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class MspCost implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -13,9 +11,7 @@ public class MspCost implements Serializable {
 	private String alias;
 	private int memory;
 	private int cost;
-	
-	@JsonIgnore
-	private int mspCostVersionVersion;
+	private int mspCostVersionId;
 
 	public int getId() {
 		return id;
@@ -57,12 +53,12 @@ public class MspCost implements Serializable {
 		this.cost = cost;
 	}
 
-	public int getMspCostVersionVersion() {
-		return mspCostVersionVersion;
+	public int getMspCostVersionId() {
+		return mspCostVersionId;
 	}
 
-	public void setMspCostVersionVersion(int mspCostVersionVersion) {
-		this.mspCostVersionVersion = mspCostVersionVersion;
+	public void setMspCostVersionId(int mspCostVersionId) {
+		this.mspCostVersionId = mspCostVersionId;
 	}
 	
 }

@@ -19,8 +19,8 @@ public interface VolumnsMapper {
 	public List<Volumn> findByProjectId(@Param("projectId") int projectId);
 	
 	@Insert("insert into volumns "
-			+ " (cluster_name, app_name, app_memory_min, app_memory_max, replica_count, pod_momory_request, pod_memory_limit, pod_cpu_request, pod_cpu_limit, "
-			+ "  pod_momory_request_sum, pod_memory_limit_sum, pod_cpu_request_sum, pod_cpu_limit_sum, project_id, created) "
+			+ " (cluster_name, app_name, app_memory_min, app_memory_max, replica_count, pod_memory_request, pod_memory_limit, pod_cpu_request, pod_cpu_limit, "
+			+ "  pod_memory_request_sum, pod_memory_limit_sum, pod_cpu_request_sum, pod_cpu_limit_sum, project_id, created) "
 			+ " values "
 			+ " (#{clusterName}, #{appName}, #{appMemoryMin}, #{appMemoryMax}, #{replicaCount}, #{podMemoryRequest}, #{podMemoryLimit}, #{podCpuRequest}, #{podCpuLimit},"
 			+ "  #{podMemoryRequestSum}, #{podMemoryLimitSum}, #{podCpuRequestSum}, #{podCpuLimitSum}, #{projectId}, #{created})")
@@ -32,11 +32,11 @@ public interface VolumnsMapper {
 			+ "     app_memory_min = #{appMemoryMin}, "
 			+ "     app_memory_max = #{appMemoryMax}, "
 			+ "     replica_count = #{replicaCount}, "
-			+ "     pod_momory_request = #{podMemoryRequest}, "
+			+ "     pod_memory_request = #{podMemoryRequest}, "
 			+ "     pod_memory_limit = #{podMemoryLimit}, "
 			+ "     pod_cpu_request = #{podCpuRequest}, "
 			+ "     pod_cpu_limit = #{podCpuLimit}, "
-			+ "     pod_momory_request_sum = #{podMemoryRequestSum}, "
+			+ "     pod_memory_request_sum = #{podMemoryRequestSum}, "
 			+ "     pod_memory_limit_sum = #{podMemoryLimitSum}, "
 			+ "     pod_cpu_request_sum = #{podCpuRequestSum}, "
 			+ "     pod_cpu_limit_sum = #{podCpuLimitSum} "

@@ -20,45 +20,35 @@ public class EstimateResponse extends Estimate {
 	public int getSumMonthly() {
 		return sumMonthly;
 	}
-
 	public void setSumMonthly(int sumMonthly) {
 		this.sumMonthly = sumMonthly;
 	}
-
 	public int getSumYearly() {
 		return sumYearly;
 	}
-
 	public void setSumYearly(int sumYearly) {
 		this.sumYearly = sumYearly;
 	}
-
 	public EstimateServiceCost getCloudZService() {
 		return cloudZService;
 	}
-
 	public void setCloudZService(EstimateServiceCost cloudZService) {
 		this.cloudZService = cloudZService;
 	}
-
 	public EstimateServiceCost getStorageService() {
 		return storageService;
 	}
-
 	public void setStorageService(EstimateServiceCost storageService) {
 		this.storageService = storageService;
 	}
-	
 	public Summary getSummary() {
 		return summary;
 	}
-
 	public void setSummary(Summary summary) {
 		this.summary = summary;
 	}
 	
 	public void addSummary(int sumCloudCost, int sumLaborCost, int sumTotalCost) {
-		this.summary = new Summary();
 		this.summary.setSumCloudCost(sumCloudCost);
 		this.summary.setSumLaborCost(sumLaborCost);
 		this.summary.setSumTotalCost(sumTotalCost);
@@ -70,89 +60,34 @@ public class EstimateResponse extends Estimate {
 		this.summary.getClusters().add(sum);
 	}
 	
-	public List<EstimateItem> findPlatformServiceCostItem() {
+	public List<EstimateItem> findCloudZServiceItem() {
 		List<EstimateItem> items = new ArrayList<EstimateItem>();
 		setEstimateItemProperty(cloudZService, items);
 		return items;
 	}
-	public void addPlatformServiceCostItem(List<EstimateItem> items) {
-		setEstimateItem(cloudZService, items);
-	}
 	
-	public List<EstimateItem> findCloudZServiceItem() {
+	public List<EstimateItem> findStorageServiceItem() {
 		List<EstimateItem> items = new ArrayList<EstimateItem>();
 		setEstimateItemProperty(storageService, items);
 		return items;
 	}
-	public void addStorageServiceItem(List<EstimateItem> items) {
-		setEstimateItem(storageService, items);
+	
+	public void addCloudZService(List<EstimateItem> items) {
+		addEstimateServiceCost(cloudZService, items);
 	}
 	
-	public void addCloudZServiceStructure(List<EstimateItem> items) {
-		cloudZService = new EstimateServiceCost();
-		setStructure(cloudZService, items);
+	public void addStorageService(List<EstimateItem> items) {
+		addEstimateServiceCost(storageService, items);
 	}
 	
-	public void addStorageServiceStructure(List<EstimateItem> items) {
-		storageService = new EstimateServiceCost();
-		setStructure(storageService, items);
-	}
-	private void setStructure(EstimateServiceCost serviceCost, List<EstimateItem> items) {
-		if(items == null) return;
-		
-		items.stream()
-			.filter(item ->  item.getEstimateType() != null && item.getClusterName() == null)
-			.collect(Collectors.toList())
-			.forEach(item -> {
-				serviceCost.setSumMonthly(item.getPricePerMonthly());
-				serviceCost.setSumYearly(item.getPricePerYearly());
-			});
-	
-		items.stream()
-			.filter(item ->  (item.getClusterName() != null && item.getProductId() == 0))
-			.collect(Collectors.toList())
-			.forEach(item -> {
-				EstimateCluster cluster = new EstimateCluster();
-				cluster.setClusterName(item.getClusterName());
-				cluster.setSumMonthly(item.getPricePerMonthly());
-				cluster.setSumYearly(item.getPricePerYearly());
-				serviceCost.getClusters().add(cluster);
-			});
-		
-		items.stream()
-			.filter(item ->  item.getClusterName() != null && item.getProductId() > 0 && item.getServiceName() == null)
-			.forEach(item -> {
-				EstimateProduct product = new EstimateProduct();
-				product.setProductId(item.getProductId());
-				product.setProductName(item.getProductName());
-				product.setSumMonthly(item.getPricePerMonthly());
-				product.setSumYearly(item.getPricePerYearly());
-				
-				serviceCost.getClusters().forEach(cluster -> {
-					if(cluster.getClusterName().equals(item.getClusterName())) {
-						cluster.getProducts().add(product);
-					}
-				});
-			});
-
-		items.stream()
-			.filter(item ->  item.getClusterName() != null && item.getProductId() > 0 && item.getServiceName() != null)
-			.forEach(item -> {
-				EstimateService service = new EstimateService();
-				service.setServiceName(item.getServiceName());
-				service.setSumMonthly(item.getPricePerMonthly());
-				service.setSumYearly(item.getPricePerYearly());
-				
-				serviceCost.getClusters().forEach(cluster -> {
-					if(cluster.getClusterName().equals(item.getClusterName())) {
-						cluster.getProducts().forEach(product -> {
-							if(product.getProductId() == item.getProductId()) {
-								product.getServices().add(service);
-							}
-						});
-					}
-				});
-			});
+	private void addEstimateServiceCost(EstimateServiceCost estimateType, List<EstimateItem> items) {
+		estimateType.setSumMonthly(items.stream().mapToInt(EstimateItem::getPricePerMonthly).sum());
+		estimateType.setSumYearly(items.stream().mapToInt(EstimateItem::getPricePerYearly).sum());
+		items.stream().map(EstimateItem::getClusterName)
+					  .distinct()
+					  .forEach(clusterName -> {
+						  estimateType.addCluster(clusterName, items.stream().filter(item -> clusterName.equals(item.getClusterName())).collect(Collectors.toList()));
+					  });
 	}
 	
 	private void setEstimateItemProperty(EstimateServiceCost serviceCost, List<EstimateItem> items) {
@@ -170,32 +105,27 @@ public class EstimateResponse extends Estimate {
 			});
 		});
 	}
-
-	public void setEstimateItem(EstimateServiceCost serviceCost, List<EstimateItem> items) {
-		if(items == null) return;
-		
-		items.forEach(item -> {
-			serviceCost.getClusters().stream()
-				.filter(cluster -> cluster.getClusterName().equals(item.getClusterName()))
-				.findFirst().ifPresent(cluster -> {
-					cluster.getProducts().stream()
-						.filter(product -> product.getProductId() == item.getProductId())
-						.findFirst().ifPresent(product ->{
-							product.getServices().stream()
-								.filter(service -> service.getServiceName().equals(item.getServiceName()))
-								.findFirst().ifPresent(service -> {
-									service.addEstimateItem(item);
-								});
-						});
-				});;
-		});
-	}
 }
 
 class EstimateServiceCost {
 	private int sumMonthly;
 	private int sumYearly;
 	private List<EstimateCluster> clusters = new ArrayList<EstimateCluster>();
+	
+	public void addCluster(String clusterName, List<EstimateItem> items) {
+		EstimateCluster cluster = new EstimateCluster();
+		cluster.setClusterName(clusterName);
+		cluster.setSumMonthly(items.stream().mapToInt(EstimateItem::getPricePerMonthly).sum());
+		cluster.setSumYearly(items.stream().mapToInt(EstimateItem::getPricePerYearly).sum());
+		
+		items.stream().map(EstimateItem::getProductId)
+		  			  .distinct()
+		  			  .forEach(productId -> {
+		  				  cluster.addProduct(productId, items.stream().filter(item -> productId == item.getProductId()).collect(Collectors.toList()));
+		  			  });
+		
+		clusters.add(cluster);
+	}
 	public int getSumMonthly() {
 		return sumMonthly;
 	}
@@ -221,6 +151,22 @@ class EstimateCluster {
 	private int sumMonthly;
 	private int sumYearly;
 	private List<EstimateProduct> products = new ArrayList<EstimateProduct>();
+	
+	public void addProduct(int productId, List<EstimateItem> items) {
+		EstimateProduct product = new EstimateProduct();
+		product.setProductId(productId);
+		product.setProductName(items.get(0).getProductName());
+		product.setSumMonthly(items.stream().mapToInt(EstimateItem::getPricePerMonthly).sum());
+		product.setSumYearly(items.stream().mapToInt(EstimateItem::getPricePerYearly).sum());
+		
+		items.stream().map(EstimateItem::getServiceName)
+					  .distinct()
+					  .forEach(serviceName -> {
+						  product.addService(serviceName, items.stream().filter(item -> serviceName.equals(item.getServiceName())).collect(Collectors.toList()));
+					  });
+		
+		products.add(product);
+	}
 	public String getClusterName() {
 		return clusterName;
 	}
@@ -253,6 +199,15 @@ class EstimateProduct {
 	private int sumMonthly;
 	private int sumYearly;
 	private List<EstimateService> services = new ArrayList<EstimateService>();
+	
+	public void addService(String serviceName, List<EstimateItem> items) {
+		EstimateService service = new EstimateService();
+		service.setServiceName(serviceName);
+		service.setSumMonthly(items.stream().mapToInt(EstimateItem::getPricePerMonthly).sum());
+		service.setSumYearly(items.stream().mapToInt(EstimateItem::getPricePerYearly).sum());
+		service.setClassifications(items);
+		services.add(service);
+	}
 	public int getProductId() {
 		return productId;
 	}

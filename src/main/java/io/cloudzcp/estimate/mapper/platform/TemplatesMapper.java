@@ -15,19 +15,20 @@ import io.cloudzcp.estimate.domain.platform.Template;
 @Mapper
 public interface TemplatesMapper {
 
-	@Select("select * from templates where product_id = #{productId} order by id asc")
+	@Select("select * from templates where product_id = #{productId} order by sort asc")
 	public List<Template> findByProductId(@Param("productId") int productId);
 	
 	@Insert("insert into templates"
-			+ "(estimate_type, service_name, classification_name, classification_type, product_id, created) "
+			+ "(estimate_type, service_name, classification_name, classification_type, product_id, sort, created) "
 			+ " values "
-			+ " (#{estimateType}, #{serviceName}, #{classificationName}, #{classificationType}, #{productId}, #{created})")
+			+ " (#{estimateType}, #{serviceName}, #{classificationName}, #{classificationType}, #{productId}, #{sort}, #{created})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int insert(Template template);
 	
 	@Update("update templates set "
 			+ " classification_name = #{classificationName}, "
-			+ " classification_type = #{classificationType} "
+			+ " classification_type = #{classificationType}, "
+			+ " sort = #{sort} "
 			+ " where id = #{id}")
 	public int update(Template template);
 	
