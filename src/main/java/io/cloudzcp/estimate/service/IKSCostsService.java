@@ -62,7 +62,7 @@ public class IKSCostsService {
 	public IKSVmResponse getVmVersion(int id) {
 		IKSVmResponse iksVmVersion = iksVmVersionsMapper.findById(id);
 		if(iksVmVersion == null) {
-			throw new EntityNotFoundException(String.format("%s not found.", id));
+			throw new EntityNotFoundException(String.format("VM is not found : %s", id));
 		} else {
 			iksVmVersion.setVms(iksVmsMapper.findByVersionId(iksVmVersion.getId()));
 		}
@@ -100,7 +100,7 @@ public class IKSCostsService {
 	public IKSStorageResponse getStorage(String id) {
 		IKSStorageResponse iksStorageVersion = iksStorageVersionsMapper.findById(id);
 		if(iksStorageVersion == null) {
-			throw new EntityNotFoundException(String.format("%s not found.", id));
+			throw new EntityNotFoundException(String.format("Storage is not found : %s", id));
 		} else {
 			iksStorageVersion.setFileStorages(iksFileStoragesMapper.findByVersionId(iksStorageVersion.getId()));
 		}

@@ -51,7 +51,7 @@ public class ProjectService {
 	public Project getProject(int projectId) {
 		Project project = projectsMapper.findById(projectId);
 		if(project == null) {
-			throw new EntityNotFoundException(String.format("%s not found", projectId));
+			throw new EntityNotFoundException(String.format("Project is not found : %s", projectId));
 		}
 		
 		return project;
@@ -60,7 +60,7 @@ public class ProjectService {
 	public Project modifyProject(Project project) {
 		int count = projectsMapper.update(project);
 		if(count == 0) {
-			throw new EntityNotFoundException(String.format("%s not found", project.getId()));
+			throw new EntityNotFoundException(String.format("Project is not found : %s", project.getId()));
 		}
 		
 		return project;

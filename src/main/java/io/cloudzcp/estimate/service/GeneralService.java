@@ -27,7 +27,7 @@ public class GeneralService {
 	public General getGeneral(String id) {
 		General general = generalsMapper.findById(id);
 		if(general == null) {
-			throw new EntityNotFoundException(String.format("%s not found.", id));
+			throw new EntityNotFoundException(String.format("General is not found : %s", id));
 		}
 		
 		return general;

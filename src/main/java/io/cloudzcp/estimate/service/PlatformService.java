@@ -51,7 +51,7 @@ public class PlatformService {
 	public Product getProduct(int productId) {
 		Product productService = productsMapper.findById(productId);
 		if(productService == null) {
-			throw new EntityNotFoundException(String.format("%s not found.", productId));
+			throw new EntityNotFoundException(String.format("Product is not found : %s", productId));
 		}
 		return productService;
 	}
@@ -70,7 +70,7 @@ public class PlatformService {
 		int count = productsMapper.delete(productId);
 		
 		if(count == 0) {
-			throw new EntityNotFoundException(String.format("%s not found.", productId));
+			throw new EntityNotFoundException(String.format("Product is not found : %s", productId));
 		}
 	}
 	
@@ -78,7 +78,7 @@ public class PlatformService {
 	public void modifyProduct(Product productService) {
 		int count = productsMapper.update(productService);
 		if(count == 0) {
-			throw new EntityNotFoundException(String.format("%s not found.", productService.getId()));
+			throw new EntityNotFoundException(String.format("Product is not found : %s", productService.getId()));
 		}
 	}
 	
@@ -235,7 +235,7 @@ public class PlatformService {
 	public ProductMspCostVersion getMspCostVersion(int id) {
 		ProductMspCostVersion mspCostVersion = mspCostVersionsMapper.findById(id);
 		if(mspCostVersion == null) {
-			throw new EntityNotFoundException(String.format("%s not found.", id));
+			throw new EntityNotFoundException(String.format("Msp cost is not found : %s", id));
 		}
 		
 		return getProductMspCostVersion(mspCostVersion);
