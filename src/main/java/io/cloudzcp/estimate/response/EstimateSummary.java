@@ -5,18 +5,20 @@ import java.io.Serializable;
 public class EstimateSummary implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String clusterName;
+	private String environmentName;
 	private int productId;
 	private String productName;
 	private String estimateType;
 	private int cloudCost;
 	private int laborCost;
 	private int totalCost;
-	public String getClusterName() {
-		return clusterName;
+	private int pricePerGb;
+	
+	public String getEnvironmentName() {
+		return environmentName;
 	}
-	public void setClusterName(String clusterName) {
-		this.clusterName = clusterName;
+	public void setEnvironmentName(String environmentName) {
+		this.environmentName = environmentName;
 	}
 	public String getProductName() {
 		return productName;
@@ -54,5 +56,11 @@ public class EstimateSummary implements Serializable {
 	public void setEstimateType(String estimateType) {
 		this.estimateType = estimateType;
 	}
-
+	public int getPricePerGb() {
+		return pricePerGb;
+	}
+	public void setPricePerGb(int pricePerGb) {
+		this.pricePerGb = pricePerGb;
+	}
+	
 }

@@ -9,19 +9,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.cloudzcp.estimate.constant.CommonConstants;
+import io.cloudzcp.estimate.domain.project.Environment;
 import io.cloudzcp.estimate.domain.project.EstimateItem;
 import io.cloudzcp.estimate.domain.project.Project;
-import io.cloudzcp.estimate.domain.project.Volumn;
+import io.cloudzcp.estimate.domain.project.Volume;
 import io.cloudzcp.estimate.exception.EntityNotFoundException;
+import io.cloudzcp.estimate.mapper.project.EnvironmentsMapper;
 import io.cloudzcp.estimate.mapper.project.EstimateItemsMapper;
 import io.cloudzcp.estimate.mapper.project.EstimatesMapper;
 import io.cloudzcp.estimate.mapper.project.ProjectsMapper;
-import io.cloudzcp.estimate.mapper.project.VolumnsMapper;
+import io.cloudzcp.estimate.mapper.project.VolumesMapper;
 import io.cloudzcp.estimate.response.EstimateHistoryResponse;
 import io.cloudzcp.estimate.response.EstimateResponse;
 import io.cloudzcp.estimate.response.EstimateSummary;
 import io.cloudzcp.estimate.response.ProjectSummaryResponse;
-import io.cloudzcp.estimate.response.ProjectVolumnResponse;
+import io.cloudzcp.estimate.response.ProjectVolumeResponse;
 
 @Service
 public class ProjectService {
@@ -30,7 +32,10 @@ public class ProjectService {
 	private ProjectsMapper projectsMapper;
 	
 	@Autowired
-	private VolumnsMapper volumnsMapper;
+	private EnvironmentsMapper environmentsMapper;
+	
+	@Autowired
+	private VolumesMapper volumesMapper;
 	
 	@Autowired
 	private EstimatesMapper estimatesMapper;
@@ -70,45 +75,78 @@ public class ProjectService {
 	public void deleteProject(int projectId) {
 		estimateItemsMapper.deleteByProjectId(projectId);
 		estimatesMapper.deleteByProjectId(projectId);
-		volumnsMapper.deleteByProjectId(projectId);
+		volumesMapper.deleteByProjectId(projectId);
+		environmentsMapper.deleteByProjectId(projectId);
 		projectsMapper.delete(projectId);
 	}
 	
-	public ProjectVolumnResponse getVolumn(int projectId) {
-		ProjectVolumnResponse volumn = new ProjectVolumnResponse();
-		List<Volumn> applications = volumnsMapper.findByProjectId(projectId);
+	public ProjectVolumeResponse getVolume(int projectId) {
+		ProjectVolumeResponse response = new ProjectVolumeResponse();
 		
-		volumn.setSumCpu(applications.stream().mapToDouble(Volumn::getPodCpuLimitSum).sum()/1000);
-		volumn.setSumMemory(Math.ceil(applications.stream().mapToDouble(Volumn::getPodMemoryLimitSum).sum()/1024));
+		List<Environment> environments = environmentsMapper.findByProjectId(projectId);
+		List<Volume> applications = volumesMapper.findByProjectId(projectId);
 		
-		Map<String, List<Volumn>> collectorMap = applications.stream().collect(Collectors.groupingBy(Volumn::getClusterName));
-		collectorMap.keySet().stream().sorted().forEach(key -> {
-			volumn.addCluster(key, collectorMap.get(key));
+		Map<Integer, List<Volume>> collectorMap = applications.stream().collect(Collectors.groupingBy(Volume::getEnvironmentId));
+
+		response.setSumCpu(applications.stream().mapToDouble(Volume::getPodCpuLimitSum).sum()/1000);
+		response.setSumMemory(Math.ceil(applications.stream().mapToDouble(Volume::getPodMemoryLimitSum).sum()/1024));
+		
+		environments.forEach(cluster -> {
+			response.addCluster(cluster.getId(), cluster.getName(), collectorMap.get(cluster.getId()));
 		});
-		return volumn;
+		return response;
 	}
 	
 	@Transactional
-	public void modifyVolumn(int projectId, ProjectVolumnResponse volumn) {
-		List<Volumn> oldApplications = volumnsMapper.findByProjectId(projectId);
-		List<Volumn> applications = volumn.findAllVolumn();
+	public void modifyVolume(int projectId, ProjectVolumeResponse response) {
+		List<Environment> oldEnvironments = environmentsMapper.findByProjectId(projectId);
+		List<Volume> oldApplications = volumesMapper.findByProjectId(projectId);
+		
+		List<Environment> environments = response.findAllEnvironment();
+		List<Volume> applications = response.findAllVolume();
 		
 		// old application에 있는데 new application에 없으면 application delete
 		if(oldApplications != null) {
-			for(Volumn old : oldApplications) {
+			for(Volume old : oldApplications) {
 				if(!applications.stream().anyMatch(a -> a.getId() == old.getId())) {
-					volumnsMapper.delete(old.getId());
+					volumesMapper.delete(old.getId());
 				}
 			}
 		}
 		
-		for(Volumn application : applications) {
-			if(application.getId() == 0) {	//id가 없으면 insert
-				application.setProjectId(projectId);
-				volumnsMapper.insert(application);
-			} else {						//id가 있으면 update
-				application.setProjectId(projectId);
-				volumnsMapper.update(application);
+		//old environment에 있는데 new environment에 없으면 delete
+		if(oldEnvironments != null) {
+			for(Environment old : oldEnvironments) {
+				if(!environments.stream().anyMatch(e -> e.getId() == old.getId())) {
+					environmentsMapper.delete(old.getId());
+				}
+			}
+		}
+		
+		for(Environment env : environments) {
+			env.setProjectId(projectId);
+			
+			if(env.getId() == 0) { // environment insert
+				environmentsMapper.insert(env);
+				
+				List<Volume> list = response.findVolume(env);
+				for(Volume volume : list) {
+					volume.setEnvironmentId(env.getId());
+					volumesMapper.insert(volume);
+				}
+			} else { 				// environment update
+				environmentsMapper.update(env);
+
+				List<Volume> list = response.findVolume(env);
+				for(Volume volume : list) {
+					volume.setEnvironmentId(env.getId());
+
+					if(volume.getId() == 0) {	// volume insert
+						volumesMapper.insert(volume);
+					} else {					// volume update
+						volumesMapper.update(volume);
+					}
+				}
 			}
 		}
 	}
@@ -140,8 +178,8 @@ public class ProjectService {
 		int sumTotalCost = summary.stream().mapToInt(EstimateSummary::getTotalCost).sum();
 		result.addSummary(sumCloudCost, sumLaborCost, sumTotalCost);
 		
-		summary.stream().map(EstimateSummary::getClusterName).distinct().forEach(clusterName -> {
-			result.addClusterSummary(clusterName,  summary.stream().filter(product -> product.getClusterName().equals(clusterName)).collect(Collectors.toList()));
+		summary.stream().map(EstimateSummary::getEnvironmentName).distinct().forEach(clusterName -> {
+			result.addEnvironmentSummary(clusterName,  summary.stream().filter(product -> product.getEnvironmentName().equals(clusterName)).collect(Collectors.toList()));
 		});
 	}
 	
@@ -176,6 +214,7 @@ public class ProjectService {
 			item.setEstimateId(estimate.getId());
 			item.setEstimateType(CommonConstants.ESTIMATE_TYPE_CLOUDZ_SERVICE);
 			item.setSort(sort++);
+			estimateItemsMapper.add(item);
 		}
 		
 		for(EstimateItem item : estimate.findStorageServiceItem()) {

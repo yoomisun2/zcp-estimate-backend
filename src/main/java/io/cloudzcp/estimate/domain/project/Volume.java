@@ -2,11 +2,10 @@ package io.cloudzcp.estimate.domain.project;
 
 import java.io.Serializable;
 
-public class Volumn implements Serializable {
+public class Volume implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int id;
-	private String clusterName;
 	private String appName;
 	private int appMemoryMin;
 	private int appMemoryMax;
@@ -19,7 +18,7 @@ public class Volumn implements Serializable {
 	private double podMemoryLimitSum;
 	private double podCpuRequestSum;
 	private double podCpuLimitSum;
-	private int projectId;
+	private int environmentId;
 	private String created;
 	private String createdDt;
 	public int getId() {
@@ -27,12 +26,6 @@ public class Volumn implements Serializable {
 	}
 	public void setId(int id) {
 		this.id = id;
-	}
-	public String getClusterName() {
-		return clusterName;
-	}
-	public void setClusterName(String clusterName) {
-		this.clusterName = clusterName;
 	}
 	public String getAppName() {
 		return appName;
@@ -106,12 +99,6 @@ public class Volumn implements Serializable {
 	public void setPodCpuLimitSum(double podCpuLimitSum) {
 		this.podCpuLimitSum = podCpuLimitSum;
 	}
-	public int getProjectId() {
-		return projectId;
-	}
-	public void setProjectId(int projectId) {
-		this.projectId = projectId;
-	}
 	public String getCreated() {
 		return created;
 	}
@@ -124,6 +111,11 @@ public class Volumn implements Serializable {
 	public void setCreatedDt(String createdDt) {
 		this.createdDt = createdDt;
 	}
-	
+	public int getEnvironmentId() {
+		return environmentId;
+	}
+	public void setEnvironmentId(int environmentId) {
+		this.environmentId = environmentId;
+	}
 
 }

@@ -53,11 +53,11 @@ public class EstimateResponse extends Estimate {
 		this.summary.setSumLaborCost(sumLaborCost);
 		this.summary.setSumTotalCost(sumTotalCost);
 	}
-	public void addClusterSummary(String clusterName, List<EstimateSummary> products) {
-		ClusterSummary sum = new ClusterSummary();
-		sum.setClusterName(clusterName);
+	public void addEnvironmentSummary(String environmentName, List<EstimateSummary> products) {
+		EnvironmentSummary sum = new EnvironmentSummary();
+		sum.setEnvironmentName(environmentName);
 		sum.setProducts(products);
-		this.summary.getClusters().add(sum);
+		this.summary.getEnvironments().add(sum);
 	}
 	
 	public List<EstimateItem> findCloudZServiceItem() {
@@ -81,24 +81,27 @@ public class EstimateResponse extends Estimate {
 	}
 	
 	private void addEstimateServiceCost(EstimateServiceCost estimateType, List<EstimateItem> items) {
+		if(items == null) return;
+		
 		estimateType.setSumMonthly(items.stream().mapToInt(EstimateItem::getPricePerMonthly).sum());
 		estimateType.setSumYearly(items.stream().mapToInt(EstimateItem::getPricePerYearly).sum());
-		items.stream().map(EstimateItem::getClusterName)
+		items.stream().map(EstimateItem::getEnvironmentName)
 					  .distinct()
-					  .forEach(clusterName -> {
-						  estimateType.addCluster(clusterName, items.stream().filter(item -> clusterName.equals(item.getClusterName())).collect(Collectors.toList()));
+					  .forEach(environmentName -> {
+						  estimateType.addEnvironment(environmentName, items.stream().filter(item -> environmentName.equals(item.getEnvironmentName())).collect(Collectors.toList()));
 					  });
 	}
 	
 	private void setEstimateItemProperty(EstimateServiceCost serviceCost, List<EstimateItem> items) {
-		serviceCost.getClusters().forEach(cluster -> {
-			cluster.getProducts().forEach(product -> {
+		serviceCost.getEnvironments().forEach(environment -> {
+			environment.getProducts().forEach(product -> {
 				product.getServices().forEach(service -> {
 					service.getClassifications().forEach(item -> {
 						item.setServiceName(service.getServiceName());
 						item.setProductId(product.getProductId());
 						item.setProductName(product.getProductName());
-						item.setClusterName(cluster.getClusterName());
+						item.setEnvironmentId(environment.getEnvironmentId());
+						item.setEnvironmentName(environment.getEnvironmentName());
 						items.add(item);
 					});
 				});
@@ -110,21 +113,22 @@ public class EstimateResponse extends Estimate {
 class EstimateServiceCost {
 	private int sumMonthly;
 	private int sumYearly;
-	private List<EstimateCluster> clusters = new ArrayList<EstimateCluster>();
+	private List<EstimateEnvironment> environments = new ArrayList<EstimateEnvironment>();
 	
-	public void addCluster(String clusterName, List<EstimateItem> items) {
-		EstimateCluster cluster = new EstimateCluster();
-		cluster.setClusterName(clusterName);
-		cluster.setSumMonthly(items.stream().mapToInt(EstimateItem::getPricePerMonthly).sum());
-		cluster.setSumYearly(items.stream().mapToInt(EstimateItem::getPricePerYearly).sum());
+	public void addEnvironment(String environmentName, List<EstimateItem> items) {
+		EstimateEnvironment environment = new EstimateEnvironment();
+		environment.setEnvironmentId(items.get(0).getEnvironmentId());
+		environment.setEnvironmentName(environmentName);
+		environment.setSumMonthly(items.stream().mapToInt(EstimateItem::getPricePerMonthly).sum());
+		environment.setSumYearly(items.stream().mapToInt(EstimateItem::getPricePerYearly).sum());
 		
 		items.stream().map(EstimateItem::getProductId)
 		  			  .distinct()
 		  			  .forEach(productId -> {
-		  				  cluster.addProduct(productId, items.stream().filter(item -> productId == item.getProductId()).collect(Collectors.toList()));
+		  				  environment.addProduct(productId, items.stream().filter(item -> productId == item.getProductId()).collect(Collectors.toList()));
 		  			  });
 		
-		clusters.add(cluster);
+		environments.add(environment);
 	}
 	public int getSumMonthly() {
 		return sumMonthly;
@@ -138,16 +142,17 @@ class EstimateServiceCost {
 	public void setSumYearly(int sumYearly) {
 		this.sumYearly = sumYearly;
 	}
-	public List<EstimateCluster> getClusters() {
-		return clusters;
+	public List<EstimateEnvironment> getEnvironments() {
+		return environments;
 	}
-	public void setClusters(List<EstimateCluster> clusters) {
-		this.clusters = clusters;
+	public void setEnvironments(List<EstimateEnvironment> environments) {
+		this.environments = environments;
 	}
 }
 
-class EstimateCluster {
-	private String clusterName;
+class EstimateEnvironment {
+	private int environmentId;
+	private String environmentName;
 	private int sumMonthly;
 	private int sumYearly;
 	private List<EstimateProduct> products = new ArrayList<EstimateProduct>();
@@ -167,11 +172,18 @@ class EstimateCluster {
 		
 		products.add(product);
 	}
-	public String getClusterName() {
-		return clusterName;
+	
+	public int getEnvironmentId() {
+		return environmentId;
 	}
-	public void setClusterName(String clusterName) {
-		this.clusterName = clusterName;
+	public void setEnvironmentId(int environmentId) {
+		this.environmentId = environmentId;
+	}
+	public String getEnvironmentName() {
+		return environmentName;
+	}
+	public void setEnvironmentName(String environmentName) {
+		this.environmentName = environmentName;
 	}
 	public int getSumMonthly() {
 		return sumMonthly;
@@ -274,14 +286,14 @@ class EstimateService {
 	}
 }
 
-class ClusterSummary {
-	private String clusterName;
+class EnvironmentSummary {
+	private String environmentName;
 	List<EstimateSummary> products = new ArrayList<EstimateSummary>();
-	public String getClusterName() {
-		return clusterName;
+	public String getEnvironmentName() {
+		return environmentName;
 	}
-	public void setClusterName(String clusterName) {
-		this.clusterName = clusterName;
+	public void setEnvironmentName(String environmentName) {
+		this.environmentName = environmentName;
 	}
 	public List<EstimateSummary> getProducts() {
 		return products;
@@ -296,7 +308,7 @@ class Summary {
 	private int sumCloudCost;
 	private int sumLaborCost;
 	private int sumTotalCost;
-	private List<ClusterSummary> clusters = new ArrayList<ClusterSummary>();
+	private List<EnvironmentSummary> environments = new ArrayList<EnvironmentSummary>();
 	public int getSumCloudCost() {
 		return sumCloudCost;
 	}
@@ -315,11 +327,11 @@ class Summary {
 	public void setSumTotalCost(int sumTotalCost) {
 		this.sumTotalCost = sumTotalCost;
 	}
-	public List<ClusterSummary> getClusters() {
-		return clusters;
+	public List<EnvironmentSummary> getEnvironments() {
+		return environments;
 	}
-	public void setClusters(List<ClusterSummary> clusters) {
-		this.clusters = clusters;
+	public void setEnvironments(List<EnvironmentSummary> environments) {
+		this.environments = environments;
 	}
 	
 }

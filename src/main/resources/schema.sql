@@ -9,7 +9,8 @@ DROP TABLE IF EXISTS templates;
 DROP TABLE IF EXISTS msp_cost_versions;
 DROP TABLE IF EXISTS msp_costs;
 DROP TABLE IF EXISTS projects;
-DROP TABLE IF EXISTS volumns;
+DROP TABLE IF EXISTS environments;
+DROP TABLE IF EXISTS volumes;
 DROP TABLE IF EXISTS estimates;
 DROP TABLE IF EXISTS estimate_items;
 
@@ -145,9 +146,19 @@ CREATE TABLE projects (
 	CONSTRAINT pk_projects_id PRIMARY KEY (id)
 );
 
-CREATE TABLE volumns (
+CREATE TABLE environments (
+	id				INT NOT NULL AUTO_INCREMENT,
+	name			VARCHAR(20) NOT NULL,
+	project_id		INT NOT NULL,
+	created			VARCHAR(20),
+	created_dt		TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT pk_environments_id PRIMARY KEY (id)
+);
+CREATE INDEX ix_environments_project_id on environments (project_id);
+
+CREATE TABLE volumes (
 	id						INT NOT NULL AUTO_INCREMENT,
-	cluster_name			VARCHAR(20) NOT NULL,
+	environment_id			INT NOT NULL,
 	app_name				VARCHAR(100) NOT NULL,
 	app_memory_min			INT,
 	app_memory_max			INT,
@@ -160,12 +171,11 @@ CREATE TABLE volumns (
 	pod_memory_limit_sum	FLOAT,
 	pod_cpu_request_sum		FLOAT,
 	pod_cpu_limit_sum		FLOAT,
-	project_id				INT NOT NULL,
 	created					VARCHAR(20),
 	created_dt				TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT pk_volumns_id PRIMARY KEY (id)
+	CONSTRAINT pk_volumes_id PRIMARY KEY (id)
 );
-CREATE INDEX ix_volumns_project_id on volumns (project_id);
+CREATE INDEX ix_volumes_environment_id on volumes (environment_id);
 
 CREATE TABLE estimates (
 	id					INT NOT NULL AUTO_INCREMENT,
@@ -187,18 +197,19 @@ CREATE TABLE estimate_items (
 	id						INT NOT NULL AUTO_INCREMENT,
 	estimate_id				INT NOT NULL,
 	estimate_type			VARCHAR(20) NOT NULL,
-	cluster_name			VARCHAR(20) NOT NULL,
+	environment_id			INT NOT NULL,
+	environment_name		VARCHAR(20) NOT NULL,
 	product_id				INT NOT NULL,
 	service_name			VARCHAR(100),
 	classification_name		VARCHAR(100) NOT NULL,
-	classification_type		VARCHAR(20),
+	classification_type		VARCHAR(20) NOT NULL,
 	addon_id				INT,
 	addon_application_name VARCHAR(100),
 	iks_vm_id				INT,
 	hardware_type			VARCHAR(100),
 	storage_type			VARCHAR(100),
 	endurance_iops			INT,
-	storage_size			INT,
+	iks_file_storage_id		INT,
 	number					INT,
 	cores					INT,
 	memory					INT,
@@ -209,5 +220,5 @@ CREATE TABLE estimate_items (
 	created_dt				TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT pk_estimate_items_id PRIMARY KEY (id)
 );
-CREATE INDEX ix_estimate_items_estimate_id_product_id on estimate_items (estimate_id, product_id);
+CREATE INDEX ix_estimate_items_estimate_id_environment_id_product_id on estimate_items (estimate_id, environment_id, product_id);
 

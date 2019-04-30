@@ -16,7 +16,7 @@ import io.cloudzcp.estimate.domain.project.Project;
 import io.cloudzcp.estimate.response.EstimateHistoryResponse;
 import io.cloudzcp.estimate.response.EstimateResponse;
 import io.cloudzcp.estimate.response.ProjectSummaryResponse;
-import io.cloudzcp.estimate.response.ProjectVolumnResponse;
+import io.cloudzcp.estimate.response.ProjectVolumeResponse;
 import io.cloudzcp.estimate.service.ProjectService;
 
 @RestController
@@ -46,14 +46,14 @@ public class ProjectRestController {
 		return projectService.modifyProject(project);
 	}
 	
-	@GetMapping(value = "/{projectId}/volumn")
-	public ProjectVolumnResponse getProjectVolumn(@PathVariable("projectId") int projectId) {
-		return projectService.getVolumn(projectId);
+	@GetMapping(value = "/{projectId}/volume")
+	public ProjectVolumeResponse getProjectVolume(@PathVariable("projectId") int projectId) {
+		return projectService.getVolume(projectId);
 	}
 	
-	@PutMapping(value = "/{projectId}/volumn")
-	public void modifyProjectVolumn(@PathVariable("projectId") int projectId, @RequestBody ProjectVolumnResponse volumn) {
-		projectService.modifyVolumn(projectId, volumn);
+	@PutMapping(value = "/{projectId}/volume")
+	public void modifyProjectVolume(@PathVariable("projectId") int projectId, @RequestBody ProjectVolumeResponse volume) {
+		projectService.modifyVolume(projectId, volume);
 	}
 	
 	@GetMapping(value = "/{projectId}/estimate")

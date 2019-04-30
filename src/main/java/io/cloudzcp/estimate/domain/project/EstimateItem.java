@@ -8,7 +8,8 @@ public class EstimateItem implements Serializable {
 	private int id;
 	private int estimateId;
 	private String estimateType;
-	private String clusterName;
+	private int environmentId;
+	private String environmentName;
 	private int productId;
 	private String productName;
 	private String serviceName;
@@ -21,7 +22,8 @@ public class EstimateItem implements Serializable {
 	private String hardwareType;
 	private String storageType;
 	private int enduranceIops;
-	private int storageSize;
+	private int iksFileStorageId;
+	private int iksFileStorageDisk;
 	private int number;
 	private int cores;
 	private int memory;
@@ -48,12 +50,6 @@ public class EstimateItem implements Serializable {
 	}
 	public void setEstimateType(String estimateType) {
 		this.estimateType = estimateType;
-	}
-	public String getClusterName() {
-		return clusterName;
-	}
-	public void setClusterName(String clusterName) {
-		this.clusterName = clusterName;
 	}
 	public int getProductId() {
 		return productId;
@@ -115,12 +111,6 @@ public class EstimateItem implements Serializable {
 	public void setEnduranceIops(int enduranceIops) {
 		this.enduranceIops = enduranceIops;
 	}
-	public int getStorageSize() {
-		return storageSize;
-	}
-	public void setStorageSize(int storageSize) {
-		this.storageSize = storageSize;
-	}
 	public int getNumber() {
 		return number;
 	}
@@ -180,6 +170,30 @@ public class EstimateItem implements Serializable {
 	}
 	public void setSort(int sort) {
 		this.sort = sort;
+	}
+	public int getEnvironmentId() {
+		return environmentId;
+	}
+	public void setEnvironmentId(int environmentId) {
+		this.environmentId = environmentId;
+	}
+	public String getEnvironmentName() {
+		return environmentName;
+	}
+	public void setEnvironmentName(String environmentName) {
+		this.environmentName = environmentName;
+	}
+	public int getIksFileStorageId() {
+		return iksFileStorageId;
+	}
+	public void setIksFileStorageId(int iksFileStorageId) {
+		this.iksFileStorageId = iksFileStorageId;
+	}
+	public int getIksFileStorageDisk() {
+		return iksFileStorageDisk;
+	}
+	public void setIksFileStorageDisk(int iksFileStorageDisk) {
+		this.iksFileStorageDisk = iksFileStorageDisk;
 	}
 	
 }
